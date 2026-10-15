@@ -31,6 +31,10 @@ import win32process
 import psutil
 import ctypes
 
+# 战斧浏览器可执行文件路径：通过环境变量 ZHANFU_BROWSER_PATH 配置，
+# 不在源码中硬编码个人机器盘符/安装路径。未设置时为空，相关检测/启动会提示未配置。
+ZHANFU_BROWSER_EXE = os.environ.get('ZHANFU_BROWSER_PATH', '')
+
 def is_admin():
     """检查是否具有管理员权限"""
     try:
@@ -308,7 +312,7 @@ class MonitorThread(QThread):
                 self.log_signal.emit(f"已在战斧浏览器中打开URL: {url}")
             else:
                 # 如果没有找到战斧浏览器，尝试启动它
-                browser_path = 'D:\\Program Files (x86)\\zhanfubrowser\\4.2.0.8\\Core\\zhanfubrowser.exe'
+                browser_path = ZHANFU_BROWSER_EXE
                 if os.path.exists(browser_path):
                     # 启动战斧浏览器
                     subprocess.Popen([browser_path, url])
@@ -443,7 +447,7 @@ def detect_zhanfu_browser():
         if (win.get("hwnd") == 330358 and
             win.get("title") == "TK-TwoNi" and
             win.get("class") == "Chrome_WidgetWin_1" and
-            win.get("exe_path") == "D:\\Program Files (x86)\\zhanfubrowser\\4.2.0.8\\Core\\zhanfubrowser.exe" and
+            win.get("exe_path") == ZHANFU_BROWSER_EXE and
             win.get("process_name") == "zhanfubrowser.exe"):
             return win
     return None
@@ -571,7 +575,7 @@ class MainWindow(QMainWindow):
                 self.log_signal.emit(f"已在战斧浏览器中打开URL: {url}")
             else:
                 # 如果没有找到战斧浏览器，尝试启动它
-                browser_path = 'D:\\Program Files (x86)\\zhanfubrowser\\4.2.0.8\\Core\\zhanfubrowser.exe'
+                browser_path = ZHANFU_BROWSER_EXE
                 if os.path.exists(browser_path):
                     # 启动战斧浏览器
                     subprocess.Popen([browser_path, url])

@@ -50,6 +50,7 @@ python monitor.py
 
 - `config.json`：桌面端保存的消息和 URL 配置（运行时生成）。
 - `monitor.log`：桌面端日志（运行时生成）。
+- 目标浏览器可执行路径通过环境变量 `ZHANFU_BROWSER_PATH` 提供（指向你本机的浏览器 exe），源码不再硬编码任何盘符路径；未设置时相关"启动/检测浏览器"功能会提示未配置。
 - 扩展使用本地存储保存浏览器 ID；页面交互取决于目标网页结构和权限。
 
 请不要将真实客户数据、私密 ID、会话链接或其他敏感信息提交到仓库。
@@ -67,3 +68,5 @@ python monitor.py
 ## License
 
 MIT License. See [LICENSE](./LICENSE).
+
+原创代码采用 MIT；再分发请保留版权与许可文本。原始仓库：https://github.com/change979666/browser-url-editor 。本仓库不捆绑第三方 SDK / 图标字体 / 数据集；扩展图标为仓库自带资源。
