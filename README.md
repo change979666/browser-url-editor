@@ -1,78 +1,69 @@
-# 浏览器自动化消息助手监控程序
+# Browser Automation Message Assistant
 
-这是一个用于监控和管理浏览器自动化消息助手的 Python 程序。
+面向**经授权的浏览器工作流**的实验性工具，由 Chrome Manifest V3 扩展和 Windows Python 桌面程序组成。桌面端用于管理消息内容、URL 模板和 ID 列表；扩展端负责识别当前页面、读取浏览器 ID，并执行页面内导航和消息交互。
 
-## 功能特点
+> **当前状态 / Status:** the two components are present, but their local integration is not complete. The extension requests `http://localhost:5000/config` and `/browser_status`; the current `monitor.py` does not expose those HTTP endpoints. Treat the extension/desktop bridge as work in progress rather than a verified end-to-end feature.
 
-- 配置管理：设置消息模板、发送间隔、ID模式等
-- ID管理：支持从文件导入ID或手动添加ID
-- 实时监控：显示运行状态、消息计数、最后发送消息等
-- 日志记录：记录所有操作和状态变化
+## 功能概览
 
-## 安装说明
+- **消息与 URL 配置**：桌面端可配置消息正文、带 `{id}` 占位符的基础 URL，并保存配置。
+- **ID 列表管理**：支持从文件加载 ID、添加 ID、清空列表和按列表推进操作。
+- **Chrome 扩展**：基于 Manifest V3，内容脚本可以识别常见文本输入框和发送按钮，支持消息模板中的 `{{DATE}}`、`{{TIME}}` 变量。
+- **页面状态与浏览器 ID**：扩展生成并保存浏览器 ID，可在弹出窗口查看连接状态并复制 ID。
+- **运行日志**：Python 桌面程序记录运行过程，便于排查操作问题。
 
-1. 确保已安装 Python 3.7 或更高版本
-2. 安装依赖包：
-   ```bash
-   pip install -r requirements.txt
-   ```
+## 技术栈
 
-## 使用说明
+- Browser extension: JavaScript, Chrome Extensions Manifest V3
+- Desktop app: Python, PyQt5
+- Python dependencies: see [requirements.txt](./requirements.txt)
 
-1. 运行程序：
-   ```bash
-   python monitor.py
-   ```
+## 环境要求
 
-2. 配置选项卡：
-   - 设置消息模板
-   - 调整发送间隔
-   - 配置ID匹配模式
-   - 选择ID来源
-   - 设置随机延迟范围
+- Windows（桌面端使用 Windows 系统 API）
+- 已安装的 Python 环境
+- Chrome 或其他兼容 Manifest V3 的 Chromium 浏览器
 
-3. ID管理选项卡：
-   - 导入ID文件（支持txt格式，每行一个ID）
-   - 手动添加单个ID
-   - 清空ID列表
+## 安装与运行
 
-4. 监控选项卡：
-   - 查看运行状态
-   - 开始/停止监控
-   - 显示消息统计
+### 1. 安装桌面端依赖
 
-5. 日志选项卡：
-   - 查看操作日志
-   - 清空日志
-   - 保存日志到文件
+```powershell
+git clone https://github.com/change979666/browser-url-editor.git
+cd browser-url-editor
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python monitor.py
+```
 
-## 文件说明
+桌面端可能会请求管理员权限，因为程序包含窗口检测与前台窗口操作代码。仅在你理解并信任源码的环境中运行。
 
-- `monitor.py`：主程序文件
-- `requirements.txt`：依赖包列表
-- `config.json`：配置文件（自动生成）
-- `monitor.log`：日志文件（自动生成）
+### 2. 加载浏览器扩展
 
-## 注意事项
+1. 打开浏览器扩展管理页（Chrome 可访问 `chrome://extensions`）。
+2. 开启“开发者模式”。
+3. 选择“加载已解压的扩展程序”，选中仓库目录。
+4. 在你有权管理的测试页面验证扩展状态及交互。
 
-1. 确保Chrome扩展已正确安装并启用
-2. ID文件格式应为纯文本，每行一个ID
-3. 配置文件会自动保存在程序目录下
-4. 日志文件会记录所有操作和错误信息
+## 配置文件与日志
 
-## 常见问题
+- `config.json`：桌面端保存的消息和 URL 配置（运行时生成）。
+- `monitor.log`：桌面端日志（运行时生成）。
+- 扩展使用本地存储保存浏览器 ID；页面交互取决于目标网页结构和权限。
 
-1. 如果程序无法启动，请检查：
-   - Python版本是否正确
-   - 依赖包是否安装完整
-   - 是否有足够的系统权限
+请不要将真实客户数据、私密 ID、会话链接或其他敏感信息提交到仓库。
 
-2. 如果无法导入ID文件，请检查：
-   - 文件格式是否正确
-   - 文件编码是否为UTF-8
-   - 文件是否被其他程序占用
+## 已知限制
 
-3. 如果监控状态不更新，请检查：
-   - Chrome扩展是否正常运行
-   - 网络连接是否正常
-   - 日志中是否有错误信息 
+- **本地通信桥尚未打通**：扩展调用 `localhost:5000` 的配置和状态接口，但当前桌面端未实现对应 HTTP 服务。需补齐本地 API 或调整通信协议后，才能验证完整联动流程。
+- 网页输入框和发送按钮的识别依赖具体页面 DOM，站点更新后可能需要维护选择器。
+- 扩展声明了较广的站点访问权限；建议仅在授权环境中安装和测试，并在后续版本中收紧权限范围。
+
+## 使用边界
+
+仅用于你拥有权限、已获授权且符合目标平台规则的工作流。不要用于未经同意的批量消息发送、骚扰、垃圾信息或规避平台安全机制。
+
+## License
+
+MIT License. See [LICENSE](./LICENSE).
