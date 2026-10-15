@@ -1,0 +1,11 @@
+{
+  "name": "browser-automation-assistant",
+  "version": "1.0.0",
+  "description": "浏览器自动化消息助手",
+  "scripts": {
+    "generate-icons": "node utils/generateIcons.js"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2"
+  }
+} 

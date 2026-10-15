@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景圆形 -->
+    <circle cx="64" cy="64" r="60" fill="#3498db"/>
+    
+    <!-- 消息气泡 -->
+    <path d="M40 40 L88 40 L88 68 L64 88 L40 68 Z" fill="white"/>
+    
+    <!-- 文字 "A" -->
+    <text x="64" y="60" 
+          font-family="Arial" 
+          font-size="40" 
+          font-weight="bold" 
+          fill="#3498db" 
+          text-anchor="middle">
+        A
+    </text>
+</svg> 

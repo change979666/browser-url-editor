@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>生成图标</title>
+</head>
+<body>
+    <canvas id="canvas16" width="16" height="16"></canvas>
+    <canvas id="canvas48" width="48" height="48"></canvas>
+    <canvas id="canvas128" width="128" height="128"></canvas>
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+
+            // 清除画布
+            ctx.clearRect(0, 0, size, size);
+
+            // 绘制背景圆形
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/2 - 2, 0, Math.PI * 2);
+            ctx.fillStyle = '#3498db';
+            ctx.fill();
+
+            // 绘制消息气泡
+            const bubbleWidth = size * 0.75;
+            const bubbleHeight = size * 0.5;
+            const bubbleX = (size - bubbleWidth) / 2;
+            const bubbleY = (size - bubbleHeight) / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(bubbleX, bubbleY);
+            ctx.lineTo(bubbleX + bubbleWidth, bubbleY);
+            ctx.lineTo(bubbleX + bubbleWidth, bubbleY + bubbleHeight * 0.7);
+            ctx.lineTo(size/2, bubbleY + bubbleHeight);
+            ctx.lineTo(bubbleX, bubbleY + bubbleHeight * 0.7);
+            ctx.closePath();
+            ctx.fillStyle = 'white';
+            ctx.fill();
+
+            // 绘制文字
+            ctx.fillStyle = '#3498db';
+            ctx.font = `bold ${size * 0.4}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('A', size/2, size/2);
+
+            // 显示下载链接
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.textContent = `下载 ${size}x${size} 图标`;
+            link.style.display = 'block';
+            link.style.margin = '10px';
+            document.body.appendChild(link);
+        }
+
+        // 生成所有尺寸的图标
+        drawIcon(document.getElementById('canvas16'));
+        drawIcon(document.getElementById('canvas48'));
+        drawIcon(document.getElementById('canvas128'));
+    </script>
+</body>
+</html> 

@@ -1,0 +1,19 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# 运行时配置（含业务账号参数）
+config.json
+monitor.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# IDE
+.vs/
+
+# 系统
+.DS_Store
+Thumbs.db
